@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <pthread.h>
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -22,40 +23,55 @@ unsigned long	get_timestamp(unsigned long t_start)
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	return (tv.tv_sec * 1000 + tv.tv_usec / 1000) - t_start;
+	return ((tv.tv_sec * 1000 + tv.tv_usec / 1000) - t_start);
 }
 
 void	print_state(t_philo *philo, const char *state)
 {
-	pthread_mutex_lock(philo->print);
-	if (philo->is_dead == 0 && philo->eat_count != philo->max_eat)
+	pthread_mutex_lock(&philo->info->print);
+	if (!philo->info->death_occurred)
 	{
-		printf(" is dead? %d\n", philo->is_dead);
-		printf("%lu %d %s\n", get_timestamp(philo->t_start), philo->id, state);
+		printf("%lu %d %s\n", get_timestamp(philo->info->t_start),
+			philo->id, state);
 	}
-	pthread_mutex_unlock(philo->print);
+	pthread_mutex_unlock(&philo->info->print);
 }
-
 
 void	*philo_thread(void *arg)
 {
 	t_philo			*philo;
 	unsigned long	last_meal;
+	int				death_occurred;
 
 	philo = (t_philo *)arg;
-	last_meal = get_timestamp(philo->t_start);
+	last_meal = get_timestamp(philo->info->t_start);
 
 	while (1)
 	{
-		if (get_timestamp(philo->t_start) - last_meal >= philo->time_to_die)
+		pthread_mutex_lock(&philo->info->print);
+		death_occurred = philo->info->death_occurred;
+		pthread_mutex_unlock(&philo->info->print);
+
+		if (death_occurred)
 		{
-			print_state(philo, "died");
-			philo->is_dead = 1;
-			printf(" is alive? %d\n", philo->is_dead);
 			break ;
 		}
-		if (philo->eat_count == philo->max_eat)
+
+		if (get_timestamp(philo->t_start) - last_meal >= philo->time_to_die)
+		{
+			pthread_mutex_lock(&philo->info->print);
+			if (!philo->info->death_occurred)
+			{
+				philo->info->death_occurred = 1;
+				printf("%lu %d died\n", get_timestamp(philo->info->t_start), philo->id);
+			}
+			pthread_mutex_unlock(&philo->info->print);
 			break ;
+		}
+
+		if (philo->eat_count == philo->max_eat)
+			break;
+
 		if (philo->id % 2 == 1)
 		{
 			pthread_mutex_lock(philo->left_fork);
@@ -86,16 +102,21 @@ void	*philo_thread(void *arg)
 	return (NULL);
 }
 
+
 int	main(int ac, char **av)
 {
 	pthread_mutex_t	*forks;
 	pthread_t		*threads;
 	t_philo			*philo;
+	t_info			info;
 	int				i;
 	int				num_philo;
 	unsigned long	t_start;
-    pthread_mutex_t print_mutex;
+	pthread_mutex_t print_mutex;
 
+	pthread_mutex_init(&info.print, NULL);
+	info.t_start = get_timestamp(0);
+	info.death_occurred = 0;
 	num_philo = atoi(av[1]);
 	threads = (pthread_t *) malloc(num_philo * sizeof(pthread_t));
 	philo = (t_philo *) malloc(num_philo * sizeof(t_philo));
@@ -112,9 +133,8 @@ int	main(int ac, char **av)
 		pthread_mutex_init(&forks[i], NULL);
 		i++;
 	}
-	t_start = get_timestamp(0); // Initialize t_start
-	printf(" SOU O T_START %lu \n", t_start);
-    pthread_mutex_init(&print_mutex, NULL); // Initialize print_mutex
+	t_start = get_timestamp(0);
+	pthread_mutex_init(&print_mutex, NULL);
 	i = 0;
 	while (i < num_philo)
 	{
@@ -130,7 +150,8 @@ int	main(int ac, char **av)
 		philo[i].left_fork = &forks[i];
 		philo[i].right_fork = &forks[(i + 1) % num_philo];
 		philo[i].t_start = t_start; // Set t_start for each philosopher
-        philo[i].print = &print_mutex; // Set print mutex for each philosopher
+		philo[i].print = &print_mutex; // Set print mutex for each philosopher
+		philo[i].info = &info;
 		if (pthread_create(&threads[i], NULL, philo_thread, &philo[i]) != 0)
 			return (1);
 		i++;
@@ -151,5 +172,4 @@ int	main(int ac, char **av)
 	free(threads);
 	free(philo);
 	free(forks);
-
 }
