@@ -28,18 +28,32 @@ unsigned long	get_timestamp(unsigned long t_start)
 void	print_state(t_philo *philo, const char *state)
 {
 	pthread_mutex_lock(philo->print);
-	printf("%lu %d %s\n", get_timestamp(philo->t_start), philo->id, state);
+	if (philo->is_dead == 0 && philo->eat_count != philo->max_eat)
+	{
+		printf(" is dead? %d\n", philo->is_dead);
+		printf("%lu %d %s\n", get_timestamp(philo->t_start), philo->id, state);
+	}
 	pthread_mutex_unlock(philo->print);
 }
 
 
 void	*philo_thread(void *arg)
 {
-	t_philo	*philo = (t_philo *)arg;
-	unsigned long last_meal_timestamp = get_timestamp(philo->t_start);
+	t_philo			*philo;
+	unsigned long	last_meal;
+
+	philo = (t_philo *)arg;
+	last_meal = get_timestamp(philo->t_start);
 
 	while (1)
 	{
+		if (get_timestamp(philo->t_start) - last_meal >= philo->time_to_die)
+		{
+			print_state(philo, "died");
+			philo->is_dead = 1;
+			printf(" is alive? %d\n", philo->is_dead);
+			break ;
+		}
 		if (philo->eat_count == philo->max_eat)
 			break ;
 		if (philo->id % 2 == 1)
@@ -56,10 +70,10 @@ void	*philo_thread(void *arg)
 		}
 		print_state(philo, "has taken a fork");
 
+		last_meal = get_timestamp(philo->t_start);
 		print_state(philo, "is eating");
 		usleep(philo->time_to_eat * 1000);
 		philo->eat_count++;
-		last_meal_timestamp = get_timestamp(philo->t_start);
 
 		pthread_mutex_unlock(philo->right_fork);
 		pthread_mutex_unlock(philo->left_fork);
@@ -68,12 +82,6 @@ void	*philo_thread(void *arg)
 		usleep(philo->time_to_sleep * 1000);
 
 		print_state(philo, "is thinking");
-		printf("\n tempo:%d e tempo para morrer:%d\n", philo->t_start, philo->time_to_die);
-		if (get_timestamp(philo->t_start) - last_meal_timestamp >= philo->time_to_die)
-		{
-			print_state(philo, "died");
-			break ;
-		}
 	}
 	return (NULL);
 }
@@ -92,6 +100,7 @@ int	main(int ac, char **av)
 	threads = (pthread_t *) malloc(num_philo * sizeof(pthread_t));
 	philo = (t_philo *) malloc(num_philo * sizeof(t_philo));
 	forks = (pthread_mutex_t *) malloc(num_philo * sizeof(pthread_mutex_t));
+	philo->is_dead = 0;
 	if (ac < 5 || ac > 6)
 	{
 		printf("Incorrect number of arguments\n");
@@ -104,6 +113,7 @@ int	main(int ac, char **av)
 		i++;
 	}
 	t_start = get_timestamp(0); // Initialize t_start
+	printf(" SOU O T_START %lu \n", t_start);
     pthread_mutex_init(&print_mutex, NULL); // Initialize print_mutex
 	i = 0;
 	while (i < num_philo)
