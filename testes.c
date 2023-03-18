@@ -36,7 +36,7 @@ void	print_state(t_philo *philo, const char *state)
 void	*philo_thread(void *arg)
 {
 	t_philo	*philo = (t_philo *)arg;
-	unsigned long last_meal_timestamp = get_timestamp();
+	unsigned long last_meal_timestamp = get_timestamp(philo->t_start);
 
 	while (1)
 	{
@@ -45,33 +45,33 @@ void	*philo_thread(void *arg)
 		if (philo->id % 2 == 1)
 		{
 			pthread_mutex_lock(philo->left_fork);
-			print_state(philo->id, "has taken a fork");
+			print_state(philo, "has taken a fork");
 			pthread_mutex_lock(philo->right_fork);
 		}
 		else
 		{
 			pthread_mutex_lock(philo->right_fork);
-			print_state(philo->id, "has taken a fork");
+			print_state(philo, "has taken a fork");
 			pthread_mutex_lock(philo->left_fork);
 		}
-		print_state(philo->id, "has taken a fork");
+		print_state(philo, "has taken a fork");
 
-		print_state(philo->id, "is eating");
+		print_state(philo, "is eating");
 		usleep(philo->time_to_eat * 1000);
 		philo->eat_count++;
-		last_meal_timestamp = get_timestamp();
+		last_meal_timestamp = get_timestamp(philo->t_start);
 
 		pthread_mutex_unlock(philo->right_fork);
 		pthread_mutex_unlock(philo->left_fork);
 
-		print_state(philo->id, "is sleeping");
+		print_state(philo, "is sleeping");
 		usleep(philo->time_to_sleep * 1000);
 
-		print_state(philo->id, "is thinking");
-
-		if (get_timestamp() - last_meal_timestamp >= philo->time_to_die)
+		print_state(philo, "is thinking");
+		printf("\n tempo:%d e tempo para morrer:%d\n", philo->t_start, philo->time_to_die);
+		if (get_timestamp(philo->t_start) - last_meal_timestamp >= philo->time_to_die)
 		{
-			print_state(philo->id, "died");
+			print_state(philo, "died");
 			break ;
 		}
 	}
@@ -85,6 +85,8 @@ int	main(int ac, char **av)
 	t_philo			*philo;
 	int				i;
 	int				num_philo;
+	unsigned long	t_start;
+    pthread_mutex_t print_mutex;
 
 	num_philo = atoi(av[1]);
 	threads = (pthread_t *) malloc(num_philo * sizeof(pthread_t));
@@ -101,6 +103,8 @@ int	main(int ac, char **av)
 		pthread_mutex_init(&forks[i], NULL);
 		i++;
 	}
+	t_start = get_timestamp(0); // Initialize t_start
+    pthread_mutex_init(&print_mutex, NULL); // Initialize print_mutex
 	i = 0;
 	while (i < num_philo)
 	{
@@ -115,6 +119,8 @@ int	main(int ac, char **av)
 			philo[i].max_eat = -1;
 		philo[i].left_fork = &forks[i];
 		philo[i].right_fork = &forks[(i + 1) % num_philo];
+		philo[i].t_start = t_start; // Set t_start for each philosopher
+        philo[i].print = &print_mutex; // Set print mutex for each philosopher
 		if (pthread_create(&threads[i], NULL, philo_thread, &philo[i]) != 0)
 			return (1);
 		i++;
