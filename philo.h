@@ -31,6 +31,6 @@ typedef struct s_philo
 	t_info			*info;
 }			t_philo;
 
-
+long	ft_atol(const char *str);
 
 #endif

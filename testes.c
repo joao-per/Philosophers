@@ -127,7 +127,7 @@ int	main(int ac, char **av)
 	pthread_mutex_init(&info.print, NULL);
 	info.t_start = get_timestamp(0);
 	info.death_occurred = 0;
-	num_philo = atoi(av[1]);
+	num_philo = ft_atol(av[1]);
 	info.num_philo = num_philo;
 	threads = (pthread_t *) malloc(num_philo * sizeof(pthread_t));
 	philo = (t_philo *) malloc(num_philo * sizeof(t_philo));
@@ -150,12 +150,12 @@ int	main(int ac, char **av)
 	while (i < num_philo)
 	{
 		philo[i].id = i + 1;
-		philo[i].time_to_die = atoi(av[2]);
-		philo[i].time_to_eat = atoi(av[3]);
-		philo[i].time_to_sleep = atoi(av[4]);
+		philo[i].time_to_die = ft_atol(av[2]);
+		philo[i].time_to_eat = ft_atol(av[3]);
+		philo[i].time_to_sleep = ft_atol(av[4]);
 		philo[i].eat_count = 0;
 		if (ac == 6)
-			philo[i].max_eat = atoi(av[5]);
+			philo[i].max_eat = ft_atol(av[5]);
 		else
 			philo[i].max_eat = -1;
 		philo[i].left_fork = &forks[i];
