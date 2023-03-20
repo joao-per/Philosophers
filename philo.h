@@ -12,6 +12,7 @@ typedef struct s_info
 	unsigned long	t_start;
 	pthread_mutex_t	print;
 	int				death_occurred;
+	int             num_philo;
 }				t_info;
 
 typedef struct s_philo
