@@ -78,32 +78,15 @@ void	*philo_thread(void *arg)
 		pthread_mutex_lock(&philo->info->print);
 		death_occurred = philo->info->death_occurred;
 		pthread_mutex_unlock(&philo->info->print);
-		if (death_occurred)
+		if (philo->eat_count == philo->max_eat || death_occurred)
 			break ;
-		if (get_timestamp(philo->t_start) - philo->last_meal >= philo->time_to_die)
-		{
-			pthread_mutex_lock(&philo->info->print);
-			if (!philo->info->death_occurred)
-			{
-				philo->info->death_occurred = 1;
-				printf("%lu %d died\n", get_timestamp(philo->info->t_start),
-					philo->id);
-			}
-			pthread_mutex_unlock(&philo->info->print);
-			break ;
-		}
-
-		if (philo->eat_count == philo->max_eat)
-			break ;
-
 		if (num_philo == 1)
 		{
 			printf("%lu %d has taken a fork\n",
-				get_timestamp(philo->info->t_start), philo->id);
+			get_timestamp(philo->info->t_start), philo->id);
 			usleep(philo->time_to_die * 1000);
 			continue ;
 		}
-
 		if (philo->id % 2 == 1)
 		{
 			pthread_mutex_lock(philo->left_fork);
@@ -117,23 +100,18 @@ void	*philo_thread(void *arg)
 			pthread_mutex_lock(philo->left_fork);
 		}
 		print_state(philo, "has taken a fork");
-
 		philo->last_meal = get_timestamp(philo->t_start);
 		print_state(philo, "is eating");
 		usleep(philo->time_to_eat * 1000);
 		philo->eat_count++;
-
 		pthread_mutex_unlock(philo->right_fork);
 		pthread_mutex_unlock(philo->left_fork);
-
 		print_state(philo, "is sleeping");
 		usleep(philo->time_to_sleep * 1000);
-
 		print_state(philo, "is thinking");
 	}
 	return (NULL);
 }
-
 
 int	main(int ac, char **av)
 {

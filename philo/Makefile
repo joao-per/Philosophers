@@ -27,7 +27,7 @@ all: $(NAME)
 $(NAME):
 	@echo "$(YELLOW)Compiling..."
 	@$(CC) -c $(CFLAGS) $(SRC_FILES:=.c)
-	@$(CC) $(SRC_FILES:=.o) -o $(NAME)
+	@$(CC) $(CFLAGS) $(SRC_FILES:=.o) -o $(NAME)
 	@echo "$(GREEN)Philosophers compilled!$(DEFAULT)"
 
 clean:

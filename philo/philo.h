@@ -34,5 +34,7 @@ typedef struct s_philo
 
 long	ft_atol(const char *str);
 int		should_philosopher_die(t_philo *philo);
+t_philo	*init_philo(char **av, int ac, int num_philo);
+t_philo	*init_philo2(char **av, int num_philo, t_philo *philo);
 
 #endif
