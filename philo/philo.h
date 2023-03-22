@@ -12,6 +12,7 @@ typedef struct s_info
 	unsigned long	t_start;
 	pthread_mutex_t	print;
 	int				death_occurred;
+	int				max_eats;
 	int				num_philo;
 }				t_info;
 
@@ -34,7 +35,8 @@ typedef struct s_philo
 
 long	ft_atol(const char *str);
 int		should_philosopher_die(t_philo *philo);
-t_philo	*init_philo(char **av, int ac, int num_philo);
-t_philo	*init_philo2(char **av, int num_philo, t_philo *philo);
+//t_philo	*init_philo(char **av, int ac, int num_philo);
+//t_philo	*init_philo2(char **av, int num_philo, t_philo *philo);
+t_philo	*init_philo2(t_philo *philo, int num_philo, int destroy);
 
 #endif
