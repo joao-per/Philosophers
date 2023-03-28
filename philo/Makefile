@@ -20,7 +20,7 @@ WHITE = \033[0;97m
 
 #Sources
 
-SRC_FILES	=	testes utils
+SRC_FILES	=	main utils init
 
 all: $(NAME) 
 
