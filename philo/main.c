@@ -11,12 +11,6 @@
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <pthread.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/time.h>
-#include <unistd.h>
 
 int	check_nbr_eats(t_philo *philo)
 {
@@ -65,7 +59,6 @@ void	start_eating(t_philo *philo)
 	pthread_mutex_unlock(philo->right_fork);
 	pthread_mutex_unlock(philo->left_fork);
 }
-
 
 void *philo_thread(void *arg)
 {

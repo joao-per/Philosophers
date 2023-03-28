@@ -26,6 +26,7 @@ t_philo	*init_philo(int ac, char **av)
 	{
 		philo[i].id = i + 1;
 		philo[i].time_to_die = ft_atol(av[2]);
+		philo[i].last_meal = 0;
 		philo[i].time_to_eat = ft_atol(av[3]);
 		philo[i].time_to_sleep = ft_atol(av[4]);
 		philo[i].eat_count = 0;
