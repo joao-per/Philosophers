@@ -32,18 +32,12 @@ void pickup_forks(t_philo *philo)
     pthread_mutex_t *fork2;
 
 	id = philo->id;
-    if (id % 2 == 0)
-    {
-        fork1 = philo->left_fork;
-        fork2 = philo->right_fork;
-    }
-    else
-    {
-        fork1 = philo->right_fork;
-        fork2 = philo->left_fork;
-    }
+	fork1 = philo->left_fork;
+	fork2 = philo->right_fork;
     pthread_mutex_lock(fork1);
     print_state(philo, "has taken a fork");
+	if(philo->info->num_philo == 1)
+		return ;
     pthread_mutex_lock(fork2);
     print_state(philo, "has taken a fork");
     pthread_mutex_lock(&philo->info->print);
@@ -62,14 +56,22 @@ void	start_eating(t_philo *philo)
 
 void *philo_thread(void *arg)
 {
-	t_philo *philo = (t_philo *)arg;
+	t_philo *philo;
 
+	philo = (t_philo *)arg;
 	while (1)
 	{
 		pickup_forks(philo);
+		if(philo->info->num_philo == 1)
+			return(0);
 		start_eating(philo);
+		pthread_mutex_lock(&philo->info->print);
 		if (philo->eat_count == philo->max_eat || philo->info->death_occurred)
+		{
+			pthread_mutex_unlock(&philo->info->print);
 			break ;
+		}
+		pthread_mutex_unlock(&philo->info->print);
 		print_state(philo, "is sleeping");
 		usleep(philo->time_to_sleep * 1000);
 		print_state(philo, "is thinking");
