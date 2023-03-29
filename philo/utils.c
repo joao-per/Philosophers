@@ -2,16 +2,19 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*                                                    +:+ +:+        
+	+:+     */
+/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+      
+	+#+        */
+/*                                                +#+#+#+#+#+  
+	+#+           */
 /*   Created: 2023/03/19 23:36:52 by joao-per          #+#    #+#             */
 /*   Updated: 2023/03/19 23:36:52 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <limits.h>
 #include "philo.h"
+#include <limits.h>
 
 long	ft_atol(const char *str)
 {
@@ -44,9 +47,9 @@ long	ft_atol(const char *str)
 
 void	program_checker(t_philo *philo, int num_philo)
 {
-	int max_eats;
-	int death;
-	int i;
+	int	max_eats;
+	int	death;
+	int	i;
 
 	max_eats = 0;
 	death = 0;
@@ -66,7 +69,7 @@ void	program_checker(t_philo *philo, int num_philo)
 
 unsigned long	get_timestamp(unsigned long t_start)
 {
-	struct timeval tv;
+	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
 	return ((tv.tv_sec * 1000 + tv.tv_usec / 1000) - t_start);

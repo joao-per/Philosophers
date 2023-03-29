@@ -2,9 +2,12 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*                                                    +:+ +:+        
+	+:+     */
+/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+      
+	+#+        */
+/*                                                +#+#+#+#+#+  
+	+#+           */
 /*   Created: 2023/03/27 18:29:25 by joao-per          #+#    #+#             */
 /*   Updated: 2023/03/27 18:29:25 by joao-per         ###   ########.fr       */
 /*                                                                            */
@@ -14,9 +17,9 @@
 
 t_philo	*init_philo(int ac, char **av)
 {
-	t_philo *philo;
-	int i;
-	int num_philo;
+	t_philo	*philo;
+	int		i;
+	int		num_philo;
 
 	num_philo = ft_atol(av[1]);
 	philo = (t_philo *)malloc(num_philo * sizeof(t_philo));
@@ -37,12 +40,12 @@ t_philo	*init_philo(int ac, char **av)
 		i++;
 	}
 	init_forks(philo, num_philo, -1);
-	return(philo);
+	return (philo);
 }
 
 t_philo	*init_forks(t_philo *philo, int num_philo, int i)
 {
-	pthread_mutex_t *forks;
+	pthread_mutex_t	*forks;
 
 	forks = (pthread_mutex_t *)malloc(num_philo * sizeof(pthread_mutex_t));
 	while (++i < num_philo)
@@ -65,12 +68,12 @@ t_philo	*init_forks(t_philo *philo, int num_philo, int i)
 	while (++i < num_philo)
 		pthread_mutex_destroy(&forks[i]);
 	free(forks);
-	return(philo);
+	return (philo);
 }
 
 int	init_threads(t_philo *philo, int num_philo, int i)
 {
-	pthread_t *threads;
+	pthread_t	*threads;
 	t_info		info;
 
 	pthread_mutex_init(&info.print, NULL);
@@ -94,4 +97,33 @@ int	init_threads(t_philo *philo, int num_philo, int i)
 			return (1);
 	}
 	free(threads);
+	return (1);
+}
+
+int	arg_checker(int ac, char **av)
+{
+	int	i;
+	int	j;
+
+	i = 1;
+	j = 0;
+	if (ac < 5 || ac > 6)
+	{
+		printf("Incorrect number of arguments\n");
+		return (0);
+	}
+	while (av[i])
+	{
+		if (ft_atol(av[i]) == 6969696969)
+			return (0);
+		j = 0;
+		while (av[i][j])
+		{
+			if (av[i][j] < '0' || av[i][j] > '9')
+				return (0);
+			j++;
+		}
+		i++;
+	}
+	return (1);
 }

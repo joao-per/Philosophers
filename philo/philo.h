@@ -57,5 +57,6 @@ unsigned long	get_timestamp(unsigned long t_start);
 void			print_state(t_philo *philo, const char *state);
 void			*philo_thread(void *arg);
 int				should_philosopher_die(t_philo *philo);
+int				arg_checker(int ac, char **av);
 
 #endif

@@ -3,7 +3,7 @@
 
 NAME		= philo
 CC			= cc
-CFLAGS		= -g -pthread
+CFLAGS		= -g -pthread -Wall -Werror -Wextra -fsanitize=thread
 RM			= rm -f
 
 # Cores
