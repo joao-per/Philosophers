@@ -32,9 +32,7 @@ void	pickup_forks(t_philo *philo)
 {
 	pthread_mutex_t	*fork1;
 	pthread_mutex_t	*fork2;
-	int				id;
 
-	id = philo->id;
 	fork1 = philo->left_fork;
 	fork2 = philo->right_fork;
 	pthread_mutex_lock(fork1);
@@ -49,12 +47,19 @@ void	pickup_forks(t_philo *philo)
 	pthread_mutex_unlock(&philo->info->print);
 }
 
+void random_usleep(int min_time, int max_time)
+{
+    int sleep_time = (rand() % (max_time - min_time + 1)) + min_time;
+    usleep(sleep_time);
+}
+
 void	start_eating(t_philo *philo)
 {
 	print_state(philo, "is eating");
 	usleep(philo->time_to_eat * 1000);
 	pthread_mutex_unlock(philo->right_fork);
 	pthread_mutex_unlock(philo->left_fork);
+	usleep(500);
 }
 
 void	*philo_thread(void *arg)
