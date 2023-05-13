@@ -1,10 +1,12 @@
-# 🍝 Philosophers 🍝
-Welcome to Philosophers, a simulation of the classic dining philosophers problem. This project is implemented in C and is part of the 42 school curriculum.
+<h1 align="center">
+	🍝 Philosophers 🍝
+</h1>
+A simulation of the classic dining philosophers problem. This project is implemented in C and is part of the 42 school curriculum.
 
-## 🎯 Goal
+### 🎯 Goal
 The main objective of this project is to solve the classic dining philosophers problem using threading and mutexes, ensuring no philosopher dies of starvation.
 
-## 🧑‍🔬 Problem Statement
+### 🧑‍🔬 Problem Statement
 - Multiple philosophers are sitting at a round table with a large bowl of spaghetti in the middle.
 - Philosophers can either eat, think, or sleep.
 - While eating, they cannot think or sleep. While thinking, they can't eat or sleep. While sleeping, they can't eat or think.
@@ -14,7 +16,7 @@ The main objective of this project is to solve the classic dining philosophers p
 - The simulation stops if a philosopher dies of starvation.
 - Philosophers do not speak with each other and do not know if another philosopher is about to die.
 
-## 💻 How to Run
+### 💻 How to Run
 **Clone the repo:**
 ```shell
 git clone https://github.com/yourusername/PhilosophersDinner.git
@@ -32,10 +34,10 @@ make
 ./philosophers (philo_nb) (time_to_die) (time_to_eat) (time_to_sleep) [nb_of_eats]
 ```
 
-## 📜 License
+### 📜 License
 This project is licensed under the MIT License. See the LICENSE file for more details.
 
-## 🙏 Acknowledgements
+### 🙏 Acknowledgements
 This project is only for learning purposes. Please don't copy any of the code presented here, try to understand the logic behind it and write your own implementation.
 
 **Happy Coding! 🎉**
