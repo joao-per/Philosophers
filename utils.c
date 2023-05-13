@@ -2,19 +2,15 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+        
-	+:+     */
-/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+      
-	+#+        */
-/*                                                +#+#+#+#+#+  
-	+#+           */
-/*   Created: 2023/03/19 23:36:52 by joao-per          #+#    #+#             */
-/*   Updated: 2023/03/19 23:36:52 by joao-per         ###   ########.fr       */
+/*                                                    +:+ +:+         +:+     */
+/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/13 23:26:29 by joao-per          #+#    #+#             */
+/*   Updated: 2023/05/13 23:26:29 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <limits.h>
 
 long	ft_atol(const char *str)
 {
