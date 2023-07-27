@@ -1,6 +1,17 @@
 <h1 align="center">
 	🍝 Philosophers 🍝
 </h1>
+
+<p align="center">
+	<b><i>Eat, sleep, spaghetti, repeat 🍝</i></b>
+</p>
+
+<div align="center">
+	
+<a href="https://github.com/joao-per/philosophers">![42 Philosopher](https://github.com/joao-per/joao-per/blob/main/Badges/Philosophers.png)</a>
+
+</div>
+
 A simulation of the classic dining philosophers problem. This project is implemented in C and is part of the 42 school curriculum.
 
 ### 🎯 Goal
